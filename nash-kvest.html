@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Для тебе моє сонечко</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=Literata:wght@400;500&family=Caveat:wght@500;700&display=swap');
+
+  :root{
+    --paper: #F6F1E6;
+    --paper-2: #EFE6D4;
+    --ink: #332D24;
+    --ink-soft: #6b6154;
+    --rose: #AE5058;
+    --sage: #74815F;
+    --gold: #A9813F;
+    --shadow: rgba(51,45,36,0.18);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Literata', serif;
+    font-size:17px;
+    line-height:1.6;
+    overflow-x:hidden;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(174,80,88,0.05), transparent 40%),
+      radial-gradient(circle at 80% 60%, rgba(116,129,95,0.06), transparent 45%);
+  }
+  h1,h2,h3{font-family:'Fraunces', serif; font-weight:600; margin:0 0 .3em; letter-spacing:.2px;}
+  .hand{font-family:'Caveat', cursive;}
+  a{color:var(--rose);}
+
+  .vine-wrap{
+    position:absolute; left:50%; top:0; bottom:0; width:2px;
+    transform:translateX(-50%);
+    z-index:0;
+  }
+  .vine-wrap svg{position:absolute; top:0; left:50%; transform:translateX(-50%); height:100%; width:60px; overflow:visible;}
+  .vine-path{fill:none; stroke:var(--sage); stroke-width:2; stroke-dasharray:6 8; opacity:.55;}
+
+  main{position:relative; max-width:720px; margin:0 auto; padding:0 24px;}
+
+  section{
+    position:relative;
+    padding:110px 0 60px;
+    z-index:1;
+  }
+  .bud{
+    position:absolute; left:50%; top:70px; transform:translate(-50%,-50%);
+    width:26px; height:26px; border-radius:50%;
+    background:var(--paper-2); border:2px solid var(--sage);
+    transition:all .5s ease;
+    z-index:2;
+  }
+  .bud.bloom{
+    background:var(--rose); border-color:var(--rose);
+    box-shadow:0 0 0 8px rgba(174,80,88,0.12);
+  }
+
+  .card{
+    background:var(--paper-2);
+    border-radius:4px;
+    padding:38px 34px;
+    box-shadow:0 18px 40px -20px var(--shadow), 0 2px 0 rgba(255,255,255,.5) inset;
+    position:relative;
+    opacity:0; transform:translateY(24px);
+    transition:opacity .8s ease, transform .8s ease;
+  }
+  .card::before{
+    content:"";
+    position:absolute; inset:10px;
+    border:1px dashed rgba(51,45,36,0.15);
+    pointer-events:none;
+  }
+  .card.show{opacity:1; transform:translateY(0);}
+
+  .eyebrow{
+    font-family:'Caveat', cursive; font-size:22px; color:var(--rose);
+    margin-bottom:4px; display:block;
+  }
+
+  .locked-note{
+    text-align:center; color:var(--ink-soft); font-size:14px; margin-top:26px;
+    font-style:italic;
+  }
+
+  button.action{
+    font-family:'Fraunces', serif; font-size:15px; letter-spacing:.4px;
+    background:var(--ink); color:var(--paper);
+    border:none; padding:13px 26px; border-radius:2px;
+    cursor:pointer; margin-top:22px;
+    transition:transform .2s ease, background .2s ease;
+  }
+  button.action:hover{background:var(--rose); transform:translateY(-2px);}
+  button.action:disabled{opacity:.35; cursor:default; transform:none;}
+
+  .hero{
+    min-height:92vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding-top:40px;
+  }
+  .seal{
+    width:78px; height:78px; border-radius:50%;
+    background:radial-gradient(circle at 32% 30%, #c96b73, var(--rose));
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 10px 24px -8px rgba(174,80,88,.6);
+    margin-bottom:26px; cursor:pointer;
+    transition:transform .35s ease;
+    font-family:'Fraunces', serif; color:var(--paper); font-size:26px;
+  }
+  .seal:hover{transform:scale(1.06) rotate(-4deg);}
+  .hero h1{font-size:clamp(30px, 6vw, 46px); max-width:11ch;}
+  .hero p{color:var(--ink-soft); max-width:38ch;}
+  .petal{
+    position:absolute; width:14px; height:18px; background:var(--rose);
+    border-radius:70% 0 70% 0; opacity:.55; pointer-events:none;
+    animation:fall linear infinite;
+  }
+  @keyframes fall{
+    to{ transform:translateY(105vh) rotate(340deg); }
+  }
+
+  .memory{
+    display:grid; grid-template-columns:96px 1fr; gap:18px; margin-bottom:26px;
+  }
+  .memory:last-child{margin-bottom:0;}
+  .memory-img{
+    width:96px; height:96px; border-radius:3px;
+    background:repeating-linear-gradient(135deg, #e4d9c3, #e4d9c3 8px, #ded1b6 8px, #ded1b6 16px);
+    border:1px dashed var(--ink-soft);
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; color:var(--ink-soft); text-align:center; padding:6px;
+  }
+  .memory-date{font-family:'Caveat', cursive; color:var(--sage); font-size:19px;}
+  .memory h3{font-size:19px; margin-bottom:4px;}
+  .memory p{margin:0; font-size:15px; color:var(--ink-soft);}
+
+  .quiz-q{margin-bottom:8px; font-size:18px;}
+  .quiz-opts{display:flex; flex-direction:column; gap:10px; margin:14px 0 6px;}
+  .opt{
+    text-align:left; background:var(--paper); border:1px solid rgba(51,45,36,.2);
+    padding:12px 16px; border-radius:3px; cursor:pointer; font-family:'Literata',serif; font-size:15px;
+    transition:all .2s ease;
+  }
+  .opt:hover{border-color:var(--rose);}
+  .opt.correct{background:rgba(116,129,95,.18); border-color:var(--sage);}
+  .opt.wrong{background:rgba(174,80,88,.14); border-color:var(--rose);}
+  .quiz-reaction{font-family:'Caveat', cursive; font-size:20px; color:var(--rose); min-height:26px; margin-top:6px;}
+  .quiz-progress{font-size:13px; color:var(--ink-soft); margin-bottom:14px;}
+
+  .video-frame{
+    width:100%; aspect-ratio:16/9; border-radius:3px;
+    background:var(--paper); border:1px dashed var(--ink-soft);
+    display:flex; align-items:center; justify-content:center; text-align:center;
+    font-size:14px; color:var(--ink-soft); padding:20px; margin-top:16px;
+  }
+  .video-frame video, .video-frame iframe{width:100%; height:100%; border:none; border-radius:3px;}
+  .hidden-block{display:none;}
+  .hidden-block.show{display:block;}
+
+  .finale{text-align:center; padding-bottom:140px;}
+  .finale h2{font-size:clamp(26px,5vw,36px);}
+  .player{
+    background:var(--ink); color:var(--paper); border-radius:4px; padding:20px 22px;
+    display:flex; align-items:center; gap:14px; margin:24px auto 0; max-width:420px;
+  }
+  .player button{
+    width:42px; height:42px; border-radius:50%; border:none; background:var(--rose); color:var(--paper);
+    cursor:pointer; font-size:16px; flex:none;
+  }
+  .player .meta{text-align:left; font-size:14px;}
+  .player .meta small{color:#c9c2b3;}
+  .final-msg{
+    font-family:'Caveat', cursive; font-size:28px; color:var(--ink); margin-top:34px; line-height:1.4;
+  }
+  .counter{margin-top:30px; font-size:14px; color:var(--ink-soft);}
+  .counter b{color:var(--rose); font-family:'Fraunces',serif; font-size:20px;}
+
+  .easter{
+    position:absolute; right:-6px; top:8px; width:16px; height:16px; border-radius:50%;
+    background:var(--sage); opacity:.35; cursor:pointer;
+  }
+
+  footer{text-align:center; padding:30px; font-size:12px; color:var(--ink-soft);}
+
+  @media(max-width:560px){
+    .memory{grid-template-columns:70px 1fr;}
+    .memory-img{width:70px; height:70px;}
+    .card{padding:28px 20px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="vine-wrap"><svg preserveAspectRatio="none" viewBox="0 0 60 100" id="vineSvg"><path class="vine-path" d="M30 0 C 10 150, 50 300, 30 450 S 10 700, 30 850 S 50 1050, 30 1200"/></svg></div>
+
+<main>
+
+  <section class="hero" id="hero">
+    <div class="seal" id="sealBtn" title="Натисни">❦</div>
+    <span class="eyebrow hand">листівка</span>
+    <h1 id="heroTitle">Для тебе, Настюш🧡 🌿</h1>
+    <p>Тут — не просто сайт. Це маленька мандрівка нашими спогадами.<br>Прогортай вниз і відкривай по черзі кожен розділ.</p>
+  </section>
+
+  <section id="ch1">
+    <div class="bud" id="bud1"></div>
+    <div class="card" id="card1">
+      <span class="eyebrow hand">розділ перший</span>
+      <h2>Лист</h2>
+      <p id="letterText">
+        [ЗАМІНИ НА СВІЙ ТЕКСТ] Привіт, кохана. Поки ти читаєш ці рядки, десь поруч
+        стоять квіти, які я обирав спеціально для тебе. А тут — те, що не вміщається
+        у жодну листівку: наша історія, кілька питань про нас, сюрприз і пісня,
+        яка звучить так, як я почуваюся поруч з тобою.
+      </p>
+      <button class="action" id="toCh2">Читати далі →</button>
+    </div>
+  </section>
+
+  <section id="ch2">
+    <div class="bud" id="bud2"></div>
+    <div class="card" id="card2">
+      <span class="eyebrow hand">розділ другий</span>
+      <h2>Чому ти найкраща</h2>
+      <div id="memoriesList"></div>
+      <button class="action" id="toCh3">Далі — маленька гра 🌸</button>
+    </div>
+  </section>
+
+  <section id="ch3">
+    <div class="bud" id="bud3"></div>
+    <div class="card" id="card3">
+      <span class="eyebrow hand">розділ четвертий</span>
+      <h2>Приховане послання</h2>
+      <p>Одна річ, яку я хотів сказати не текстом, а голосом.</p>
+      <div class="video-frame" id="videoFrame">
+        🎬 Сюди встав відео — заміни у CONFIG.videoSrc<br>посилання (YouTube unlisted / Vimeo) або файл video.mp4
+      </div>
+      <button class="action" id="toCh4">До фіналу →</button>
+    </div>
+  </section>
+
+  <section class="finale" id="ch4">
+    <div class="bud" id="bud4"></div>
+    <span class="eyebrow hand">фінал</span>
+    <h2 id="finaleTitle">Пісня для тебе</h2>
+    <div class="player">
+      <button id="playBtn">▶</button>
+      <div class="meta">
+        <div id="songTitle">Назва пісні</div>
+        <small id="songSub">заміни CONFIG.songSrc на свій файл/посилання</small>
+      </div>
+    </div>
+    <audio id="audio" src=""></audio>
+    <p class="final-msg" id="finalMsg">і це ще тільки початок нашої історії...</p>
+    <div class="counter" id="counter"></div>
+  </section>
+
+</main>
+
+<footer>зроблено з любов'ю 🤍</footer>
+
+<script>
+const CONFIG = {
+  herName: "Ім'я",
+  heroSubtitle: "Для тебе",
+
+  letter: `Привіт, кохана. Поки ти читаєш ці рядки, десь поруч стоять квіти, які я обирав
+  спеціально для тебе. Я хочу, щоб ти хоч на кілька хвилин зупинилась і почула те,
+  що я відчуваю щодня, але не завжди встигаю сказати: ти найкраща, найпрекрасніша
+  і найважливіша людина в моєму житті. Я тебе дуже кохаю — і далі трошки про те, чому.`,
+
+  memories: [
+    { date:"01", title:"Твоя усмішка", text:"[опиши, чому вона тобі подобається / що з нею робиться]", img:"" },
+    { date:"02", title:"Твоя доброта", text:"[опиши конкретний приклад її доброти]", img:"" },
+    { date:"03", title:"Твоя краса", text:"[опиши, що саме в ній вражає найбільше]", img:"" },
+    { date:"04", title:"Твій характер", text:"[опиши рису характеру, яку найбільше цінуєш]", img:"" },
+  ],
+
+  quiz: [
+    {
+      q:"Яка ти?",
+      options:["Найкрасивіша", "Найдобріша", "Найрозумніша"],
+      allCorrect:true,
+      reactionRight:"саме так, і навіть більше 🤍"
+    },
+    {
+      q:"Що в тобі найбільше зводить мене з розуму?",
+      options:["Твоя усмішка", "Твої очі", "Те, яка ти є"],
+      allCorrect:true,
+      reactionRight:"вгадала — все з переліченого"
+    },
+    {
+      q:"Наскільки сильно я тебе кохаю?",
+      options:["Дуже", "Безмежно", "Більше, ніж можу висловити словами"],
+      allCorrect:true,
+      reactionRight:"саме так"
+    }
+  ],
+
+  videoSrc: "",        
+  videoIsEmbed: false, 
+
+  songSrc: "",         
+  songTitle: "Назва пісні — Виконавець",
+
+  finalMessage: "ти найкраща, найпрекрасніша й найкоханіша. я тебе дуже люблю 🤍",
+
+  togetherSince: ""
+};
+
+
+document.getElementById('heroTitle').textContent = `${CONFIG.heroSubtitle}, ${CONFIG.herName} 🌿`;
+document.getElementById('letterText').textContent = CONFIG.letter;
+document.getElementById('finalMsg').textContent = CONFIG.finalMessage;
+document.getElementById('songTitle').textContent = CONFIG.songTitle;
+
+const memWrap = document.getElementById('memoriesList');
+CONFIG.memories.forEach(m=>{
+  const el = document.createElement('div');
+  el.className='memory';
+  el.innerHTML = `
+    <div class="memory-img">${m.img ? `<img src="${m.img}" style="width:100%;height:100%;object-fit:cover;border-radius:3px;">` : 'заміни на фото'}</div>
+    <div>
+      <div class="memory-date">${m.date}</div>
+      <h3>${m.title}</h3>
+      <p>${m.text}</p>
+    </div>`;
+  memWrap.appendChild(el);
+});
+
+if(CONFIG.videoSrc){
+  const vf = document.getElementById('videoFrame');
+  vf.innerHTML = CONFIG.videoIsEmbed
+    ? `<iframe src="${CONFIG.videoSrc}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
+    : `<video controls src="${CONFIG.videoSrc}"></video>`;
+}
+
+if(CONFIG.songSrc){
+  document.getElementById('audio').src = CONFIG.songSrc;
+  document.getElementById('songSub').textContent = "натисни ▶";
+}
+document.getElementById('playBtn').addEventListener('click', ()=>{
+  const audio = document.getElementById('audio');
+  const btn = document.getElementById('playBtn');
+  if(!CONFIG.songSrc){ btn.textContent='🤍'; return; }
+  if(audio.paused){ audio.play(); btn.textContent='⏸'; } else { audio.pause(); btn.textContent='▶'; }
+});
+
+if(CONFIG.togetherSince){
+  const start = new Date(CONFIG.togetherSince);
+  const days = Math.floor((Date.now()-start)/86400000);
+  document.getElementById('counter').innerHTML = `ми разом уже <b>${days}</b> днів`;
+}
+
+const sections = ['ch1','ch2','ch3','ch4'];
+function unlock(id){
+  document.getElementById(id).classList.add('show');
+  const idx = sections.indexOf(id.replace('card','ch'));
+}
+document.getElementById('sealBtn').addEventListener('click', ()=>{
+  document.getElementById('bud1').classList.add('bloom');
+  document.getElementById('card1').classList.add('show');
+  document.getElementById('ch1').scrollIntoView({behavior:'smooth'});
+});
+document.getElementById('toCh2').addEventListener('click', ()=>{
+  document.getElementById('bud2').classList.add('bloom');
+  document.getElementById('card2').classList.add('show');
+  document.getElementById('ch2').scrollIntoView({behavior:'smooth'});
+});
+document.getElementById('toCh3').addEventListener('click', ()=>{
+  document.getElementById('bud3').classList.add('bloom');
+  document.getElementById('card3').classList.add('show');
+  document.getElementById('ch3').scrollIntoView({behavior:'smooth'});
+});
+document.getElementById('toCh4').addEventListener('click', ()=>{
+  document.getElementById('bud4').classList.add('bloom');
+  document.getElementById('ch4').scrollIntoView({behavior:'smooth'});
+  launchPetals(26);
+});
+
+let qIndex = 0;
+function buildQuiz(){
+  renderQuestion();
+}
+function renderQuestion(){
+  const area = document.getElementById('quizArea');
+  const total = CONFIG.quiz.length;
+  document.getElementById('quizProgress').textContent = `питання ${qIndex+1} з ${total}`;
+  if(qIndex >= total){
+    area.innerHTML = `<p class="quiz-reaction">оце так, ти знаєш нас напам'ять 🤍</p>`;
+    document.getElementById('toCh4').classList.add('show');
+    return;
+  }
+  const item = CONFIG.quiz[qIndex];
+  area.innerHTML = `
+    <div class="quiz-q">${item.q}</div>
+    <div class="quiz-opts">
+      ${item.options.map((o,i)=>`<div class="opt" data-i="${i}">${o}</div>`).join('')}
+    </div>
+    <div class="quiz-reaction" id="reaction"></div>
+  `;
+  area.querySelectorAll('.opt').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      if(area.dataset.answered) return;
+      area.dataset.answered = "1";
+      const i = +el.dataset.i;
+      const isRight = item.allCorrect ? true : (i===item.correct);
+      el.classList.add(isRight ? 'correct':'wrong');
+      document.getElementById('reaction').textContent = isRight ? item.reactionRight : item.reactionWrong;
+      setTimeout(()=>{ qIndex++; area.dataset.answered=""; renderQuestion(); }, 1100);
+    });
+  });
+}
+
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const card = e.target.querySelector('.card');
+      if(card) card.classList.add('show');
+    }
+  });
+},{threshold:.3});
+sections.forEach(id=>observer.observe(document.getElementById(id)));
+
+function launchPetals(n){
+  for(let i=0;i<n;i++){
+    const p = document.createElement('div');
+    p.className='petal';
+    p.style.left = Math.random()*100+'vw';
+    p.style.top = '-20px';
+    p.style.background = i%2 ? 'var(--rose)' : 'var(--sage)';
+    p.style.animationDuration = (6+Math.random()*6)+'s';
+    p.style.animationDelay = (Math.random()*3)+'s';
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(), 14000);
+  }
+}
+launchPetals(14);
+</script>
+</body>
+</html>
