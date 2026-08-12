@@ -1680,13 +1680,13 @@
           },
         ],
 
-        videoSrc: "video.mp4", 
-        songSrc: "Н.mp3", 
+        videoSrc: "video.mp4",
+        songSrc: "Н.mp3",
         songTitle: "Настя",
 
         finalMessage:
           "ти найкраща, найпрекрасніша й найкоханіша. я тебе дуже люблю",
-        togetherSince: "", 
+        togetherSince: "",
       };
 
       const reduceMotion = window.matchMedia(
@@ -1716,11 +1716,11 @@
         memWrap.appendChild(el);
       });
 
+      let heroVideo = null;
       if (CONFIG.videoSrc) {
         const vf = document.getElementById("videoFrame");
         const v = document.createElement("video");
         v.muted = true;
-        v.autoplay = true;
         v.loop = true;
         v.playsInline = true;
         v.src = CONFIG.videoSrc;
@@ -1728,6 +1728,7 @@
         document.getElementById("cinePlaceholderText").style.display = "none";
         const ph = document.getElementById("videoPlaceholderCanvas");
         if (ph) ph.style.display = "none";
+        heroVideo = v;
       }
 
       if (CONFIG.songSrc) {
@@ -1771,6 +1772,7 @@
         audio.addEventListener("ended", () => {
           icon.textContent = "▶";
           playerEl.classList.remove("playing");
+          if (heroVideo) heroVideo.pause();
         });
 
         btn.addEventListener("click", () => {
@@ -1782,10 +1784,12 @@
             audio.play();
             icon.textContent = "⏸";
             playerEl.classList.add("playing");
+            if (heroVideo) heroVideo.play();
           } else {
             audio.pause();
             icon.textContent = "▶";
             playerEl.classList.remove("playing");
+            if (heroVideo) heroVideo.pause();
           }
           if (!reduceMotion) {
             const r = btn.getBoundingClientRect();
