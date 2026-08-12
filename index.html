@@ -1038,7 +1038,7 @@
         height: 5px;
         background: rgba(255, 255, 255, 0.12);
         border-radius: 3px;
-        cursor: pointer;
+        pointer-events: none;
         touch-action: none;
       }
       .scrub-fill {
@@ -1801,25 +1801,7 @@
           }
         });
 
-        let dragging = false;
-        function seekFromEvent(e) {
-          if (!audio.duration) return;
-          const r = bar.getBoundingClientRect();
-          const x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
-          const p = Math.min(1, Math.max(0, x / r.width));
-          audio.currentTime = p * audio.duration;
-          updateProgress();
-        }
-        bar.addEventListener("pointerdown", (e) => {
-          dragging = true;
-          seekFromEvent(e);
-        });
-        window.addEventListener("pointermove", (e) => {
-          if (dragging) seekFromEvent(e);
-        });
-        window.addEventListener("pointerup", () => {
-          dragging = false;
-        });
+        
       })();
 
       document.getElementById("toCh2").addEventListener("click", () => {
